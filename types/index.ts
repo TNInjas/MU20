@@ -65,3 +65,38 @@ export interface UpdateProgressInput {
   current_step: number;
 }
 
+// User Goal types
+export interface UserGoal {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string | null;
+  target_amount: number;
+  current_amount: number;
+}
+
+export interface CreateGoalInput {
+  name: string;
+  description?: string;
+  target_amount: number;
+}
+
+export interface UpdateGoalInput {
+  name?: string;
+  description?: string;
+  target_amount?: number;
+  current_amount?: number;
+}
+
+export interface AllocateSurplusInput {
+  goal_id: string;
+  amount: number;
+}
+
+// Chat types
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp?: Date;
+}
+

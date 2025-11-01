@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -14,6 +16,29 @@ const navigation = [
 
 export function Navigation() {
   const pathname = usePathname();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsAuthenticated(!!user);
+      setIsLoading(false);
+    };
+
+    checkAuth();
+
+    // Listen for auth state changes
+    const supabase = createClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session?.user);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <nav className="flex items-center justify-between">
@@ -36,9 +61,11 @@ export function Navigation() {
           );
         })}
       </div>
-      <Button asChild size="sm">
-        <Link href="/signup">Get Started</Link>
-      </Button>
+      {!isLoading && !isAuthenticated && (
+        <Button asChild size="sm">
+          <Link href="/signup">Get Started</Link>
+        </Button>
+      )}
     </nav>
   );
 }

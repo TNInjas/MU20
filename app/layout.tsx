@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navigation } from "@/components/navigation/nav";
 import { Toaster } from "sonner";
 import { PostLoginRedirect } from "@/components/auth/post-login-redirect";
+import { FloatingChatbox } from "@/components/chat/floating-chatbox";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Toaster />
         <PostLoginRedirect />
+        <FloatingChatbox />
       </body>
     </html>
   );

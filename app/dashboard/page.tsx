@@ -27,7 +27,7 @@ const MOCK_GOALS = [
 ];
 
 export default function DashboardPage() {
-  const [quote, setQuote] = useState(getRandomQuote());
+  const [quote, setQuote] = useState<{ text: string; author: string } | null>(null);
   const [totalFunds] = useState(12500); // Mock total funds
   const [goals] = useState(MOCK_GOALS);
   const [categories, setCategories] = useState<UserCategory[]>([]);
@@ -45,7 +45,7 @@ export default function DashboardPage() {
     loadUserAndCategories();
   }, []);
 
-  // Refresh quote on mount
+  // Set quote on mount (client-side only to avoid hydration mismatch)
   useEffect(() => {
     setQuote(getRandomQuote());
   }, []);
@@ -135,9 +135,11 @@ export default function DashboardPage() {
         {/* Header Section with Typewriter Greeting and Quote */}
         <div className="space-y-4">
           <TypewriterGreeting userName={user?.name || "User"} />
-          <p className="text-lg text-muted-foreground italic">
-            &quot;{quote.text}&quot; — {quote.author}
-          </p>
+          {quote && (
+            <p className="text-lg text-muted-foreground italic">
+              &quot;{quote.text}&quot; — {quote.author}
+            </p>
+          )}
         </div>
 
         {/* Main Content - Two Column Layout */}

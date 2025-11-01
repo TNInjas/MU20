@@ -8,7 +8,7 @@ interface TypewriterGreetingProps {
 
 export function TypewriterGreeting({ userName }: TypewriterGreetingProps) {
   const [displayText, setDisplayText] = useState("");
-  const fullText = `Hella, ${userName}`;
+  const fullText = `Hello, ${userName}`;
 
   useEffect(() => {
     let currentIndex = 0;
