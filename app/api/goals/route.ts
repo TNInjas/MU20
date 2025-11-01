@@ -100,6 +100,52 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Automatically create investment for this goal using Gemini LLM
+    try {
+      // Get user questionnaire answers from localStorage (passed in request if available)
+      const user_questionnaire_answers = body.user_questionnaire_answers || null;
+
+      // Calculate investment split using Gemini
+      // Use internal API call - get the cookie from the request
+      const cookieHeader = request.headers.get("Cookie") || "";
+      const splitResponse = await fetch(`${request.nextUrl.origin}/api/investments/calculate-split`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Cookie": cookieHeader,
+        },
+        body: JSON.stringify({
+          goal_id: data.id,
+          user_questionnaire_answers,
+        }),
+      });
+
+      if (splitResponse.ok) {
+        const splitData = await splitResponse.json();
+        
+        // Create investment with calculated percentages
+        const { error: investmentError } = await supabase
+          .from("user_investments")
+          .insert({
+            user_id: user.id,
+            goal_id: data.id,
+            percentage_debt: splitData.percentage_debt,
+            percentage_equity: splitData.percentage_equity,
+          });
+
+        if (investmentError) {
+          console.error("Failed to create investment:", investmentError);
+          // Continue even if investment creation fails
+        }
+      } else {
+        console.error("Failed to calculate investment split");
+        // Continue even if split calculation fails
+      }
+    } catch (investmentError) {
+      console.error("Error creating investment:", investmentError);
+      // Continue even if investment creation fails - goal is still created
+    }
+
     return NextResponse.json({ data }, { status: 201 });
   } catch (error) {
     console.error("Error creating goal:", error);

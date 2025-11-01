@@ -51,6 +51,7 @@ export async function getUserGoal(goalId: string): Promise<UserGoal | null> {
 
 /**
  * Create a new goal for the current user
+ * Automatically creates an investment with equity/debt split using Gemini LLM
  */
 export async function createGoal(input: CreateGoalInput): Promise<UserGoal> {
   const { data: { user } } = await supabase.auth.getUser();
@@ -67,23 +68,38 @@ export async function createGoal(input: CreateGoalInput): Promise<UserGoal> {
     throw new Error("Target amount must be a positive number");
   }
 
-  const { data, error } = await supabase
-    .from("user_goals")
-    .insert({
-      user_id: user.id,
-      name: input.name.trim(),
-      description: input.description?.trim() || null,
-      target_amount: input.target_amount,
-      current_amount: 0,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error(`Failed to create goal: ${error.message}`);
+  // Get questionnaire answers from localStorage if available
+  let questionnaireAnswers = null;
+  if (typeof window !== "undefined") {
+    const savedAnswers = localStorage.getItem("onboardingAnswers");
+    if (savedAnswers) {
+      try {
+        questionnaireAnswers = JSON.parse(savedAnswers);
+      } catch (e) {
+        console.error("Failed to parse questionnaire answers:", e);
+      }
+    }
   }
 
-  return data;
+  // Call API route which handles both goal creation and investment creation
+  const response = await fetch("/api/goals", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ...input,
+      user_questionnaire_answers: questionnaireAnswers,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to create goal");
+  }
+
+  const result = await response.json();
+  return result.data;
 }
 
 /**

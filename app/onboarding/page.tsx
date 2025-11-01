@@ -394,19 +394,19 @@ export default function OnboardingPage() {
       return (
         <div className="space-y-8 max-w-md mx-auto">
           <div className="space-y-4 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
               Welcome to Lumos
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-foreground/70">
               Let's set up your financial journey. This will only take a few minutes.
             </p>
           </div>
 
           <form onSubmit={handleEmailSignIn} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-foreground">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
                 <Input
                   id="email"
                   type="email"
@@ -443,7 +443,7 @@ export default function OnboardingPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+              <span className="bg-background px-2 text-foreground/60">Or continue with</span>
             </div>
           </div>
 
@@ -493,11 +493,11 @@ export default function OnboardingPage() {
       return (
         <div className="space-y-8 max-w-2xl mx-auto">
           <div className="space-y-2 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
               {question.question}
             </h2>
             {question.description && (
-              <p className="text-muted-foreground">
+              <p className="text-foreground/70">
                 {question.description}
               </p>
             )}
@@ -529,10 +529,10 @@ export default function OnboardingPage() {
                 className={`w-full p-4 rounded-lg border-2 text-left transition-all duration-200 hover:border-primary hover:bg-primary/5 ${
                   selectedAnswer === option
                     ? "border-primary bg-primary/10"
-                    : "border-border bg-background"
+                    : "border-border bg-card"
                 }`}
               >
-                <span className="text-base font-medium">{option}</span>
+                <span className="text-base font-medium text-foreground">{option}</span>
               </button>
             ))}
           </div>
@@ -544,10 +544,10 @@ export default function OnboardingPage() {
       return (
         <div className="space-y-6 max-w-2xl mx-auto">
           <div className="space-y-2 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
               Set Up Your Budget Categories
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-foreground/70">
               Define spending categories and their monthly budgets
             </p>
           </div>
@@ -556,7 +556,7 @@ export default function OnboardingPage() {
             {categories.map((category, index) => (
               <div key={index} className="flex gap-3 items-end">
                 <div className="flex-1">
-                  <Label htmlFor={`category-name-${index}`} className="mb-2">
+                  <Label htmlFor={`category-name-${index}`} className="mb-2 text-foreground">
                     Category Name
                   </Label>
                   <Input
@@ -569,7 +569,7 @@ export default function OnboardingPage() {
                   />
                 </div>
                 <div className="w-32">
-                  <Label htmlFor={`category-size-${index}`} className="mb-2">
+                  <Label htmlFor={`category-size-${index}`} className="mb-2 text-foreground">
                     Monthly Budget ($)
                   </Label>
                   <Input
@@ -614,20 +614,20 @@ export default function OnboardingPage() {
       return (
         <div className="space-y-6 max-w-2xl mx-auto">
           <div className="space-y-2 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
               Set Up Your Financial Goals
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-foreground/70">
               Define your savings goals and target amounts
             </p>
           </div>
 
           <div className="space-y-4">
             {goals.map((goal, index) => (
-              <div key={index} className="space-y-3 p-4 border rounded-lg">
+              <div key={index} className="space-y-3 p-4 border rounded-lg bg-card">
                 <div className="flex gap-3 items-end">
                   <div className="flex-1">
-                    <Label htmlFor={`goal-name-${index}`} className="mb-2">
+                    <Label htmlFor={`goal-name-${index}`} className="mb-2 text-foreground">
                       Goal Name
                     </Label>
                     <Input
@@ -640,7 +640,7 @@ export default function OnboardingPage() {
                     />
                   </div>
                   <div className="w-40">
-                    <Label htmlFor={`goal-amount-${index}`} className="mb-2">
+                    <Label htmlFor={`goal-amount-${index}`} className="mb-2 text-foreground">
                       Target Amount ($)
                     </Label>
                     <Input
@@ -667,7 +667,7 @@ export default function OnboardingPage() {
                   )}
                 </div>
                 <div>
-                  <Label htmlFor={`goal-description-${index}`} className="mb-2">
+                  <Label htmlFor={`goal-description-${index}`} className="mb-2 text-foreground">
                     Description (Optional)
                   </Label>
                   <Input
@@ -704,10 +704,10 @@ export default function OnboardingPage() {
             </div>
           </div>
           <div className="space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-bold">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
               You're all set! 🎉
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-foreground/70">
               Your financial journey is ready to begin. Let's start tracking your progress.
             </p>
           </div>
@@ -730,11 +730,11 @@ export default function OnboardingPage() {
   const progress = ((currentStepIndex + 1) / TOTAL_STEPS) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Progress Bar */}
       <div className="w-full h-1 bg-muted">
         <div
-          className="h-full bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 ease-out"
+          className="h-full bg-primary transition-all duration-300 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -755,7 +755,7 @@ export default function OnboardingPage() {
 
           {/* Navigation Controls */}
           {!isWelcomeStep && !isCompleteStep && (
-            <div className="flex justify-between items-center mt-8 pt-6 border-t">
+            <div className="flex justify-between items-center mt-8 pt-6 border-t border-border">
               <Button
                 variant="outline"
                 onClick={handlePrevious}
@@ -766,7 +766,7 @@ export default function OnboardingPage() {
                 Back
               </Button>
 
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-foreground/70">
                 Step {currentStepIndex + 1} of {TOTAL_STEPS}
               </span>
 

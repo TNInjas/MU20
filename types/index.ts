@@ -120,3 +120,23 @@ export interface ChatMessage {
   timestamp?: Date;
 }
 
+// User Investment types
+export interface UserInvestment {
+  id: string;
+  user_id: string;
+  goal_id: string;
+  percentage_debt: number;
+  percentage_equity: number;
+}
+
+export interface CreateInvestmentInput {
+  goal_id: string;
+  percentage_debt: number;
+  percentage_equity: number;
+}
+
+export interface UpdateInvestmentInput {
+  percentage_debt?: number;
+  percentage_equity?: number;
+}
+
