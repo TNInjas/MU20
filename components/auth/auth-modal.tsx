@@ -174,3 +174,4 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps = {}) {
   );
 }
 
+

@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase
       .from("user_categories")
       .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .eq("user_id", user.id);
 
     if (error) {
       return NextResponse.json(

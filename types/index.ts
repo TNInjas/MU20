@@ -38,8 +38,6 @@ export interface UserCategory {
   user_id: string;
   name: string;
   size: number;
-  created_at?: string;
-  updated_at?: string;
 }
 
 export interface CreateCategoryInput {
@@ -50,5 +48,20 @@ export interface CreateCategoryInput {
 export interface UpdateCategoryInput {
   name?: string;
   size?: number;
+}
+
+// User Progress types
+export interface UserProgress {
+  id: string;
+  user_id: string;
+  current_step: number;
+}
+
+export interface CreateProgressInput {
+  current_step: number;
+}
+
+export interface UpdateProgressInput {
+  current_step: number;
 }
 

@@ -7,12 +7,18 @@ export function createClient() {
   return createBrowserClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
+        if (typeof document === 'undefined') {
+          return [];
+        }
         return document.cookie.split(';').map(cookie => {
           const [name, ...rest] = cookie.split('=');
           return { name: name.trim(), value: rest.join('=') };
         });
       },
       setAll(cookiesToSet) {
+        if (typeof document === 'undefined') {
+          return;
+        }
         cookiesToSet.forEach(({ name, value, options }) => {
           document.cookie = `${name}=${value}; path=/; ${options?.maxAge ? `max-age=${options.maxAge};` : ''} ${options?.sameSite ? `sameSite=${options.sameSite};` : ''} ${options?.secure ? 'secure;' : ''}`;
         });
