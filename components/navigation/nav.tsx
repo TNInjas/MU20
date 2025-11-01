@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -102,9 +103,13 @@ export function Navigation() {
     <nav className="flex items-center justify-between w-full gap-4">
       {/* Logo/Brand on the left */}
       <Link href="/dashboard" className="flex items-center space-x-2 flex-shrink-0">
-        <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          {APP_NAME}
-        </span>
+        <Image 
+          src="/logo.png" 
+          alt={APP_NAME} 
+          width={32} 
+          height={32}
+          className="h-8 w-8 sm:h-10 sm:w-10"
+        />
       </Link>
 
       {/* Navigation links in the center */}

@@ -54,7 +54,7 @@ export default function LandingPage() {
       <EvidenceSection />
 
       {/* Final CTA */}
-      <section className="bg-gradient-to-r from-primary to-purple-600 py-16 text-white">
+      <section className="bg-gradient-to-r from-primary to-[#5995ED] py-16 text-white">
         <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
           <Card className="mx-auto max-w-3xl border-0 bg-white/10 backdrop-blur-sm">
             <CardHeader>

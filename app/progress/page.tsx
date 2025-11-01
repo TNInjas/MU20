@@ -50,13 +50,13 @@ const MOCK_DATA = {
 
 // Step icons for better visuals
 const STEP_ICONS = [
-  { icon: PiggyBank, color: "text-yellow-600" },
-  { icon: Coins, color: "text-orange-600" },
-  { icon: TrendingUp, color: "text-green-600" },
-  { icon: TrendingUp, color: "text-blue-600" },
-  { icon: GraduationCap, color: "text-indigo-600" },
-  { icon: Home, color: "text-red-600" },
-  { icon: Trophy, color: "text-purple-600" },
+  { icon: PiggyBank, color: "text-[#FFAD05]" },
+  { icon: Coins, color: "text-[#FFAD05]" },
+  { icon: TrendingUp, color: "text-[#85BB65]" },
+  { icon: TrendingUp, color: "text-[#5995ED]" },
+  { icon: GraduationCap, color: "text-[#5995ED]" },
+  { icon: Home, color: "text-[#FFAD05]" },
+  { icon: Trophy, color: "text-[#FFAD05]" },
 ];
 
 // Helper to get next step criteria
@@ -118,7 +118,7 @@ function UserAvatar({
       style={{ top: `${position}%`, transform: "translate(-50%, -50%)" }}
     >
       <div className="relative">
-        <div className="rounded-full bg-gradient-to-br from-blue-500 to-blue-700 p-2.5 shadow-xl border-2 border-blue-300">
+        <div className="rounded-full bg-gradient-to-br from-[#5995ED] to-[#5995ED] p-2.5 shadow-xl border-2 border-[#5995ED]/50">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -249,7 +249,7 @@ function CashflowLedger() {
               <div className="grid grid-cols-3 gap-4 pb-4 border-b">
                 <div>
                   <p className="text-xs text-muted-foreground">Total Inflow</p>
-                  <p className="text-lg font-semibold text-green-600">
+                  <p className="text-lg font-semibold text-[#85BB65]">
                     ${summary.totalInflow.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -258,7 +258,7 @@ function CashflowLedger() {
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Total Outflow</p>
-                  <p className="text-lg font-semibold text-red-600">
+                  <p className="text-lg font-semibold text-[#FFAD05]">
                     ${summary.totalOutflow.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -270,7 +270,7 @@ function CashflowLedger() {
                   <p
                     className={cn(
                       "text-lg font-semibold",
-                      summary.net >= 0 ? "text-green-600" : "text-red-600"
+                      summary.net >= 0 ? "text-[#85BB65]" : "text-[#FFAD05]"
                     )}
                   >
                     ${summary.net.toLocaleString(undefined, {
@@ -309,8 +309,8 @@ function CashflowLedger() {
                           className={cn(
                             "font-semibold",
                             transaction.amount >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                              ? "text-[#85BB65]"
+                              : "text-[#FFAD05]"
                           )}
                         >
                           {transaction.amount >= 0 ? "+" : ""}
@@ -413,7 +413,7 @@ export default function ProgressPage() {
                         const isLast = step.number === BABY_STEPS.length;
                         const tooltipContent = getTooltipContent(step.number);
                         const StepIcon = STEP_ICONS[index]?.icon || Trophy;
-                        const iconColor = STEP_ICONS[index]?.color || "text-blue-600";
+                        const iconColor = STEP_ICONS[index]?.color || "text-[#5995ED]";
 
                         const positionPercent =
                           index === 0 ? 0 : (index / (BABY_STEPS.length - 1)) * 100;
@@ -434,9 +434,9 @@ export default function ProgressPage() {
                                     className={cn(
                                       "flex h-14 w-14 items-center justify-center rounded-full border-4 shadow-lg transition-all",
                                       isCompleted &&
-                                        "border-green-600 bg-gradient-to-br from-green-400 to-green-600",
+                                        "border-[#85BB65] bg-gradient-to-br from-[#85BB65]/80 to-[#85BB65]",
                                       isActive &&
-                                        "border-yellow-500 bg-gradient-to-br from-yellow-400 to-yellow-600 animate-pulse ring-4 ring-yellow-200",
+                                        "border-[#FFAD05] bg-gradient-to-br from-[#FFAD05]/80 to-[#FFAD05] animate-pulse ring-4 ring-[#FFAD05]/30",
                                       isLocked && "border-muted bg-muted"
                                     )}
                                   >
@@ -444,7 +444,7 @@ export default function ProgressPage() {
                                       <Check className="h-7 w-7 text-white" />
                                     )}
                                     {isCompleted && isLast && (
-                                      <Trophy className="h-7 w-7 text-yellow-300" />
+                                      <Trophy className="h-7 w-7 text-[#FFAD05]" />
                                     )}
                                     {isActive && (
                                       <StepIcon className={cn("h-7 w-7", iconColor)} />
@@ -458,16 +458,16 @@ export default function ProgressPage() {
                                   {isCompleted && (
                                     <div className="absolute -inset-2 pointer-events-none">
                                       <div className="absolute top-0 left-0 animate-ping">
-                                        <Sparkles className="h-3 w-3 text-yellow-400" />
+                                        <Sparkles className="h-3 w-3 text-[#FFAD05]" />
                                       </div>
                                       <div className="absolute top-0 right-0 animate-ping delay-200">
-                                        <Sparkles className="h-3 w-3 text-yellow-400" />
+                                        <Sparkles className="h-3 w-3 text-[#FFAD05]" />
                                       </div>
                                       <div className="absolute bottom-0 left-0 animate-ping delay-300">
-                                        <Sparkles className="h-3 w-3 text-yellow-400" />
+                                        <Sparkles className="h-3 w-3 text-[#FFAD05]" />
                                       </div>
                                       <div className="absolute bottom-0 right-0 animate-ping delay-500">
-                                        <Sparkles className="h-3 w-3 text-yellow-400" />
+                                        <Sparkles className="h-3 w-3 text-[#FFAD05]" />
                                       </div>
                                     </div>
                                   )}
@@ -478,9 +478,9 @@ export default function ProgressPage() {
                                   className={cn(
                                     "relative ml-24 mr-auto cursor-pointer group transition-all duration-300 w-full max-w-md",
                                     isCompleted &&
-                                      "border-green-500 bg-green-50 shadow-lg hover:shadow-xl",
+                                      "border-[#85BB65] bg-[#85BB65]/10 shadow-lg hover:shadow-xl",
                                     isActive &&
-                                      "border-yellow-500 bg-yellow-50 shadow-xl ring-2 ring-yellow-300 ring-opacity-50",
+                                      "border-[#FFAD05] bg-[#FFAD05]/10 shadow-xl ring-2 ring-[#FFAD05]/30",
                                     isLocked && "border-muted bg-muted opacity-60",
                                     !isLocked && "hover:scale-105"
                                   )}
@@ -498,9 +498,9 @@ export default function ProgressPage() {
                                         className={cn(
                                           "text-xs font-bold",
                                           isActive &&
-                                            "bg-yellow-500 text-yellow-900",
+                                            "bg-[#FFAD05] text-white",
                                           isCompleted &&
-                                            "border-green-500 bg-green-100 text-green-800",
+                                            "border-[#85BB65] bg-[#85BB65]/20 text-white",
                                           isLocked && "opacity-60"
                                         )}
                                       >
@@ -509,7 +509,7 @@ export default function ProgressPage() {
                                       {isLast && (
                                         <Badge
                                           variant="outline"
-                                          className="border-purple-500 text-purple-700 bg-purple-50 text-xs"
+                                          className="border-[#5995ED] text-white bg-[#5995ED]/20 text-xs"
                                         >
                                           Financial Literacy
                                         </Badge>
@@ -518,8 +518,8 @@ export default function ProgressPage() {
                                     <h3
                                       className={cn(
                                         "font-semibold text-sm leading-tight line-clamp-2",
-                                        isActive && "text-yellow-900",
-                                        isCompleted && "text-green-900",
+                                        isActive && "text-white",
+                                        isCompleted && "text-white",
                                         isLocked && "text-muted-foreground"
                                       )}
                                     >

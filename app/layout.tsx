@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   title: "Lumos - AI Financial Advisor | Dave Ramsey's 7 Steps",
   description:
     "Navigate your financial journey through Dave Ramsey's 7 Baby Steps. Built for college students to build wealth and achieve financial freedom.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

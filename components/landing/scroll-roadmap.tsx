@@ -44,7 +44,7 @@ export function ScrollRoadmap() {
   return (
     <div className="relative py-16">
       {/* Vertical line connecting steps */}
-      <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-purple-500 to-green-500 opacity-20 md:left-1/2 md:-translate-x-0.5"></div>
+      <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-[#5995ED] to-[#85BB65] opacity-20 md:left-1/2 md:-translate-x-0.5"></div>
 
       <div className="space-y-12">
         {BABY_STEPS.map((step, index) => {

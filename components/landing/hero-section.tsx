@@ -23,7 +23,7 @@ export function HeroSection() {
       >
         <h1 className="mb-4 text-5xl font-bold tracking-tight text-foreground sm:text-6xl">
           Your Financial{" "}
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#5995ED] to-[#FFAD05] bg-clip-text text-transparent">
             <Typewriter
               words={["Roadmap", "Freedom", "Future", "Success"]}
               className="inline-block"

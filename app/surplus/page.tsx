@@ -47,8 +47,8 @@ interface GoalWithInvestment extends UserGoal {
 }
 
 const COLORS = {
-  equity: "#10b981", // green
-  debt: "#3b82f6", // blue
+  equity: "#85BB65", // green
+  debt: "#5995ED", // blue
 };
 
 export default function SurplusPage() {
@@ -279,15 +279,15 @@ export default function SurplusPage() {
           </Card>
 
           {/* Total Invested Card */}
-          <Card className="border-green-500/20">
+          <Card className="border-[#85BB65]/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 Total Invested
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-green-600" />
+              <TrendingUp className="h-4 w-4 text-[#85BB65]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-[#85BB65]">
                 {formatCurrency(totalInvested)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -297,15 +297,15 @@ export default function SurplusPage() {
           </Card>
 
           {/* Growth Rate Card */}
-          <Card className="border-blue-500/20">
+          <Card className="border-[#5995ED]/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 Weighted Growth Rate
               </CardTitle>
-              <BarChart3 className="h-4 w-4 text-blue-600" />
+              <BarChart3 className="h-4 w-4 text-[#5995ED]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-2xl font-bold text-[#5995ED]">
                 {growthRate.toFixed(1)}%
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -315,15 +315,15 @@ export default function SurplusPage() {
           </Card>
 
           {/* Monthly Investment Card */}
-          <Card className="border-purple-500/20">
+          <Card className="border-[#FFAD05]/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 Per Goal Investment
               </CardTitle>
-              <Zap className="h-4 w-4 text-purple-600" />
+              <Zap className="h-4 w-4 text-[#FFAD05]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-600">
+              <div className="text-2xl font-bold text-[#FFAD05]">
                 {formatCurrency(monthlyContribution)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -416,24 +416,24 @@ export default function SurplusPage() {
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-xs">
                             <span className="text-muted-foreground">Equity</span>
-                            <span className="font-medium text-green-600">
+                            <span className="font-medium text-[#85BB65]">
                               {goal.investment.percentage_equity}%
                             </span>
                           </div>
                           <div className="flex items-center justify-between text-xs">
                             <span className="text-muted-foreground">Debt</span>
-                            <span className="font-medium text-blue-600">
+                            <span className="font-medium text-[#5995ED]">
                               {goal.investment.percentage_debt}%
                             </span>
                           </div>
                         </div>
                         <div className="flex gap-1 h-2 rounded-full overflow-hidden bg-muted">
                           <div
-                            className="bg-green-600"
+                            className="bg-[#85BB65]"
                             style={{ width: `${goal.investment.percentage_equity}%` }}
                           />
                           <div
-                            className="bg-blue-600"
+                            className="bg-[#5995ED]"
                             style={{ width: `${goal.investment.percentage_debt}%` }}
                           />
                         </div>

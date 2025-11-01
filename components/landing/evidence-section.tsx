@@ -68,7 +68,7 @@ export function EvidenceSection() {
                 <CardHeader>
                   <div className="mb-2 flex gap-1">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <span key={i} className="text-yellow-400">
+                      <span key={i} className="text-[#FFAD05]">
                         ★
                       </span>
                     ))}
