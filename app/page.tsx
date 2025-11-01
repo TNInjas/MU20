@@ -39,7 +39,7 @@ export default function LandingPage() {
             <CardContent>
               <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <Button asChild size="lg" className="h-12 px-8">
-                  <Link href="/signup">Start Your Journey</Link>
+                  <Link href="/onboarding">Start Your Journey</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="h-12 px-8">
                   <Link href="/progress">View Progress</Link>
@@ -68,7 +68,7 @@ export default function LandingPage() {
             <CardContent>
               <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <Button asChild size="lg" variant="secondary" className="h-12 px-8">
-                  <Link href="/signup">Get Started Free</Link>
+                  <Link href="/onboarding">Get Started Free</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="h-12 border-white/20 bg-white/10 px-8 text-white hover:bg-white/20">
                   <Link href="/progress">See How It Works</Link>

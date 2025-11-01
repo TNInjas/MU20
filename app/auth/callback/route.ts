@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  // Always redirect to onboarding first (user completes questionnaire)
+  // Always redirect to onboarding (user completes unified signup/onboarding flow)
   const redirectTo = "/onboarding?auth=success&postLogin=1";
 
   return NextResponse.redirect(`${requestUrl.origin}${redirectTo}`);

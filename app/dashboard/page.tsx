@@ -16,22 +16,26 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Plus, Trash2, DollarSign, Target, Loader2 } from "lucide-react";
 import { getUserCategories, createCategory, deleteCategory } from "@/services/categories";
-import type { UserCategory } from "@/types";
+import { getUserGoals, createGoal, deleteGoal } from "@/services/goals";
+import type { UserCategory, UserGoal } from "@/types";
 import { createClient } from "@/lib/supabase/client";
-
-// Mock goals data - replace with real data
-const MOCK_GOALS = [
-  { id: 1, title: "Emergency Fund", target: 10000, current: 3500 },
-  { id: 2, title: "Vacation", target: 5000, current: 2000 },
-  { id: 3, title: "New Car", target: 25000, current: 8500 },
-];
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function DashboardPage() {
   const [quote, setQuote] = useState<{ text: string; author: string } | null>(null);
   const [totalFunds] = useState(12500); // Mock total funds
-  const [goals] = useState(MOCK_GOALS);
+  const [goals, setGoals] = useState<UserGoal[]>([]);
   const [categories, setCategories] = useState<UserCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [goalsLoading, setGoalsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   
@@ -39,10 +43,21 @@ export default function DashboardPage() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategorySize, setNewCategorySize] = useState<string>("");
   const [isAdding, setIsAdding] = useState(false);
+  
+  // Goal form state
+  const [newGoalName, setNewGoalName] = useState("");
+  const [newGoalDescription, setNewGoalDescription] = useState("");
+  const [newGoalTarget, setNewGoalTarget] = useState<string>("");
+  const [isAddingGoal, setIsAddingGoal] = useState(false);
+  
+  // Dialog state
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+  const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
 
-  // Load user and categories on mount
+  // Load user, categories, and goals on mount
   useEffect(() => {
     loadUserAndCategories();
+    loadGoals();
   }, []);
 
   // Set quote on mount (client-side only to avoid hydration mismatch)
@@ -74,6 +89,20 @@ export default function DashboardPage() {
       setError(err instanceof Error ? err.message : "Failed to load data");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadGoals = async () => {
+    try {
+      setGoalsLoading(true);
+      setError(null);
+      const userGoals = await getUserGoals();
+      setGoals(userGoals);
+    } catch (err) {
+      console.error("Error loading goals:", err);
+      setError(err instanceof Error ? err.message : "Failed to load goals");
+    } finally {
+      setGoalsLoading(false);
     }
   };
 
@@ -110,6 +139,7 @@ export default function DashboardPage() {
       setCategories([...categories, newCategory]);
       setNewCategoryName("");
       setNewCategorySize("");
+      setIsCategoryDialogOpen(false);
     } catch (err) {
       console.error("Error creating category:", err);
       setError(err instanceof Error ? err.message : "Failed to create category");
@@ -126,6 +156,74 @@ export default function DashboardPage() {
     } catch (err) {
       console.error("Error deleting category:", err);
       setError(err instanceof Error ? err.message : "Failed to delete category");
+    }
+  };
+
+  const handleAddGoal = async () => {
+    const trimmedName = newGoalName.trim();
+    const target = parseFloat(newGoalTarget);
+
+    // Validation
+    if (!trimmedName) {
+      setError("Goal name is required");
+      return;
+    }
+
+    if (isNaN(target) || target <= 0) {
+      setError("Target amount must be a valid positive number");
+      return;
+    }
+
+    try {
+      setIsAddingGoal(true);
+      setError(null);
+
+      const newGoal = await createGoal({
+        name: trimmedName,
+        description: newGoalDescription.trim() || undefined,
+        target_amount: target,
+      });
+
+      setGoals([...goals, newGoal]);
+      setNewGoalName("");
+      setNewGoalDescription("");
+      setNewGoalTarget("");
+      setIsGoalDialogOpen(false);
+    } catch (err) {
+      console.error("Error creating goal:", err);
+      setError(err instanceof Error ? err.message : "Failed to create goal");
+    } finally {
+      setIsAddingGoal(false);
+    }
+  };
+
+  const handleCategoryDialogClose = (open: boolean) => {
+    setIsCategoryDialogOpen(open);
+    if (!open) {
+      setNewCategoryName("");
+      setNewCategorySize("");
+      setError(null);
+    }
+  };
+
+  const handleGoalDialogClose = (open: boolean) => {
+    setIsGoalDialogOpen(open);
+    if (!open) {
+      setNewGoalName("");
+      setNewGoalDescription("");
+      setNewGoalTarget("");
+      setError(null);
+    }
+  };
+
+  const handleRemoveGoal = async (goalId: string) => {
+    try {
+      setError(null);
+      await deleteGoal(goalId);
+      setGoals(goals.filter((goal) => goal.id !== goalId));
+    } catch (err) {
+      console.error("Error deleting goal:", err);
+      setError(err instanceof Error ? err.message : "Failed to delete goal");
     }
   };
 
@@ -175,32 +273,69 @@ export default function DashboardPage() {
                   Track your financial goals and progress
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {goals.map((goal) => {
-                    const progress = (goal.current / goal.target) * 100;
-                    return (
-                      <div key={goal.id} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">{goal.title}</span>
-                          <span className="text-sm text-muted-foreground">
-                            ${goal.current.toLocaleString()} / $
-                            {goal.target.toLocaleString()}
-                          </span>
+              <CardContent className="space-y-4">
+                {/* Add Goal Button */}
+                <Button
+                  onClick={() => setIsGoalDialogOpen(true)}
+                  className="w-full"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Goal
+                </Button>
+
+                {/* Goals List */}
+                {goalsLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                  </div>
+                ) : goals.length === 0 ? (
+                  <p className="py-8 text-center text-sm text-muted-foreground">
+                    No goals yet. Add your first goal above!
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {goals.map((goal) => {
+                      const progress = goal.target_amount > 0 
+                        ? (goal.current_amount / goal.target_amount) * 100 
+                        : 0;
+                      return (
+                        <div key={goal.id} className="space-y-2 rounded-lg border p-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 space-y-1">
+                              <div className="font-medium">{goal.name}</div>
+                              {goal.description && (
+                                <div className="text-sm text-muted-foreground">
+                                  {goal.description}
+                                </div>
+                              )}
+                              <div className="text-sm text-muted-foreground">
+                                ${goal.current_amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / $
+                                {goal.target_amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              </div>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleRemoveGoal(goal.id)}
+                              className="h-8 w-8 flex-shrink-0 text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+                            <div
+                              className="h-full bg-primary transition-all"
+                              style={{ width: `${Math.min(progress, 100)}%` }}
+                            />
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {progress.toFixed(1)}% complete
+                          </div>
                         </div>
-                        <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-                          <div
-                            className="h-full bg-primary transition-all"
-                            style={{ width: `${Math.min(progress, 100)}%` }}
-                          />
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {progress.toFixed(1)}% complete
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -215,66 +350,14 @@ export default function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Error Message */}
-                {error && (
-                  <div className="rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive">
-                    {error}
-                  </div>
-                )}
-
-                {/* Add Category Form */}
-                <div className="space-y-3 rounded-lg border p-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="category-name">Category Name</Label>
-                    <Input
-                      id="category-name"
-                      placeholder="e.g., Food, Shopping"
-                      value={newCategoryName}
-                      onChange={(e) => setNewCategoryName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !isAdding) {
-                          handleAddCategory();
-                        }
-                      }}
-                      disabled={isAdding}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="category-size">Fund Size ($)</Label>
-                    <Input
-                      id="category-size"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      placeholder="0.00"
-                      value={newCategorySize}
-                      onChange={(e) => setNewCategorySize(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !isAdding) {
-                          handleAddCategory();
-                        }
-                      }}
-                      disabled={isAdding}
-                    />
-                  </div>
-                  <Button 
-                    onClick={handleAddCategory} 
-                    disabled={isAdding || !newCategoryName.trim() || !newCategorySize}
-                    className="w-full"
-                  >
-                    {isAdding ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Adding...
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Category
-                      </>
-                    )}
-                  </Button>
-                </div>
+                {/* Add Category Button */}
+                <Button
+                  onClick={() => setIsCategoryDialogOpen(true)}
+                  className="w-full"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Category
+                </Button>
 
                 {/* Categories List */}
                 {loading ? (
@@ -317,6 +400,172 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Add Category Dialog */}
+      <Dialog open={isCategoryDialogOpen} onOpenChange={handleCategoryDialogClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Category</DialogTitle>
+            <DialogDescription>
+              Create a new spending category with a fund size.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {error && (
+              <div className="rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="dialog-category-name">Category Name</Label>
+              <Input
+                id="dialog-category-name"
+                placeholder="e.g., Food, Shopping"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !isAdding) {
+                    handleAddCategory();
+                  }
+                }}
+                disabled={isAdding}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dialog-category-size">Fund Size ($)</Label>
+              <Input
+                id="dialog-category-size"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+                value={newCategorySize}
+                onChange={(e) => setNewCategorySize(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !isAdding) {
+                    handleAddCategory();
+                  }
+                }}
+                disabled={isAdding}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsCategoryDialogOpen(false)}
+              disabled={isAdding}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddCategory}
+              disabled={isAdding || !newCategoryName.trim() || !newCategorySize}
+            >
+              {isAdding ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Adding...
+                </>
+              ) : (
+                <>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Category
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Goal Dialog */}
+      <Dialog open={isGoalDialogOpen} onOpenChange={handleGoalDialogClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Goal</DialogTitle>
+            <DialogDescription>
+              Create a new financial goal with a target amount.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {error && (
+              <div className="rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="dialog-goal-name">Goal Name</Label>
+              <Input
+                id="dialog-goal-name"
+                placeholder="e.g., Emergency Fund, New Car"
+                value={newGoalName}
+                onChange={(e) => setNewGoalName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !isAddingGoal && e.shiftKey === false) {
+                    e.preventDefault();
+                    handleAddGoal();
+                  }
+                }}
+                disabled={isAddingGoal}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dialog-goal-description">Description (Optional)</Label>
+              <Textarea
+                id="dialog-goal-description"
+                placeholder="Add a description for this goal..."
+                value={newGoalDescription}
+                onChange={(e) => setNewGoalDescription(e.target.value)}
+                disabled={isAddingGoal}
+                rows={3}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dialog-goal-target">Target Amount ($)</Label>
+              <Input
+                id="dialog-goal-target"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+                value={newGoalTarget}
+                onChange={(e) => setNewGoalTarget(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !isAddingGoal) {
+                    handleAddGoal();
+                  }
+                }}
+                disabled={isAddingGoal}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsGoalDialogOpen(false)}
+              disabled={isAddingGoal}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddGoal}
+              disabled={isAddingGoal || !newGoalName.trim() || !newGoalTarget}
+            >
+              {isAddingGoal ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Adding...
+                </>
+              ) : (
+                <>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Goal
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

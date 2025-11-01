@@ -93,6 +93,26 @@ export interface AllocateSurplusInput {
   amount: number;
 }
 
+// User Transaction types
+export interface UserTransaction {
+  user_id: string;
+  timestamp: string; // ISO timestamp string
+  category: string;
+  amount: number; // negative = outflow, positive = inflow
+}
+
+export interface CreateTransactionInput {
+  category: string;
+  amount: number;
+  timestamp?: string; // Optional, defaults to NOW()
+}
+
+export interface UpdateTransactionInput {
+  category?: string;
+  amount?: number;
+  timestamp?: string;
+}
+
 // Chat types
 export interface ChatMessage {
   role: "user" | "assistant";

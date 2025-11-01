@@ -40,4 +40,16 @@ export function signInWithGoogle(redirectTo?: string) {
   });
 }
 
+/**
+ * Sign out the current user.
+ */
+export async function signOut() {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+  // Redirect to home page after sign out
+  if (typeof window !== "undefined") {
+    window.location.href = "/";
+  }
+}
+
 

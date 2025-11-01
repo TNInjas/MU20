@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navigation } from "@/components/navigation/nav";
+import { Header } from "@/components/navigation/header";
 import { Toaster } from "sonner";
 import { PostLoginRedirect } from "@/components/auth/post-login-redirect";
 import { FloatingChatbox } from "@/components/chat/floating-chatbox";
@@ -32,11 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="border-b bg-background/80 backdrop-blur-sm">
-          <div className="container mx-auto px-4 py-4">
-            <Navigation />
-          </div>
-        </header>
+        <Header />
         <main>{children}</main>
         <Toaster />
         <PostLoginRedirect />

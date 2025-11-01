@@ -35,7 +35,7 @@ export function HeroSection() {
         </p>
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
           <Button asChild size="lg" className="h-12 px-8">
-            <Link href="/signup">Start Your Journey</Link>
+            <Link href="/onboarding">Start Your Journey</Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="h-12 px-8">
             <Link href="/progress">View Progress</Link>
