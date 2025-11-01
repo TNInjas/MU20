@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lumos
+
+A Next.js application with Flask backend integration.
 
 ## Getting Started
 
-First, run the development server:
+### Installation
+
+```bash
+npm install
+```
+
+### Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file in the root directory:
 
-## Learn More
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+lumos/
+├── app/                    # Next.js App Router
+│   ├── dashboard/         # Dashboard page
+│   ├── progress/          # Progress page
+│   ├── surplus/           # Surplus page
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Landing page
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── navigation/        # Navigation components
+│   └── ui/                # UI components
+├── lib/                   # Utilities and helpers
+│   ├── api/              # API client for Flask backend
+│   └── utils.ts          # Utility functions
+└── types/                # TypeScript type definitions
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pages
 
-## Deploy on Vercel
+- **Landing Page** (`/`) - Home page
+- **Dashboard** (`/dashboard`) - Dashboard page
+- **Progress** (`/progress`) - Progress tracking page
+- **Surplus** (`/surplus`) - Surplus management page
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Backend Integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The app is configured to work with a Flask backend. Configure the API base URL in `.env.local` using `NEXT_PUBLIC_API_BASE_URL`.
+
+The API client is available at `lib/api/client.ts` and can be used throughout the application:
+
+```typescript
+import { apiClient } from '@/lib/api/client';
+
+// GET request
+const data = await apiClient.get('/api/endpoint');
+
+// POST request
+const result = await apiClient.post('/api/endpoint', { data });
+```
+
+## Tech Stack
+
+- **Next.js 16** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **React 19** - UI library

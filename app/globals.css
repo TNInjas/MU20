@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-background: oklch(100% 0 0);
+  --color-foreground: oklch(9.8% 0.02 285.88);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(9.8% 0.02 285.88);
+  --color-popover: oklch(100% 0 0);
+  --color-popover-foreground: oklch(9.8% 0.02 285.88);
+  --color-primary: oklch(55.84% 0.204 264.76);
+  --color-primary-foreground: oklch(98% 0.002 285.88);
+  --color-secondary: oklch(96.5% 0.002 285.88);
+  --color-secondary-foreground: oklch(15.45% 0.015 285.88);
+  --color-muted: oklch(96.5% 0.002 285.88);
+  --color-muted-foreground: oklch(45.6% 0.015 285.88);
+  --color-accent: oklch(96.5% 0.002 285.88);
+  --color-accent-foreground: oklch(15.45% 0.015 285.88);
+  --color-destructive: oklch(62.8% 0.257 29.234);
+  --color-destructive-foreground: oklch(98% 0.002 285.88);
+  --color-border: oklch(91.4% 0.006 285.88);
+  --color-input: oklch(91.4% 0.006 285.88);
+  --color-ring: oklch(55.84% 0.204 264.76);
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @theme {
+    --color-background: oklch(9.8% 0.02 285.88);
+    --color-foreground: oklch(98% 0.002 285.88);
+    --color-card: oklch(9.8% 0.02 285.88);
+    --color-card-foreground: oklch(98% 0.002 285.88);
+    --color-popover: oklch(9.8% 0.02 285.88);
+    --color-popover-foreground: oklch(98% 0.002 285.88);
+    --color-primary: oklch(65.69% 0.196 264.76);
+    --color-primary-foreground: oklch(15.45% 0.015 285.88);
+    --color-secondary: oklch(21.25% 0.015 285.88);
+    --color-secondary-foreground: oklch(98% 0.002 285.88);
+    --color-muted: oklch(21.25% 0.015 285.88);
+    --color-muted-foreground: oklch(65.1% 0.015 285.88);
+    --color-accent: oklch(21.25% 0.015 285.88);
+    --color-accent-foreground: oklch(98% 0.002 285.88);
+    --color-destructive: oklch(54.84% 0.196 29.234);
+    --color-destructive-foreground: oklch(98% 0.002 285.88);
+    --color-border: oklch(21.25% 0.015 285.88);
+    --color-input: oklch(21.25% 0.015 285.88);
+    --color-ring: oklch(68.6% 0.196 264.76);
   }
 }
 
+* {
+  border-color: var(--color-border);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Custom walking animation */
+@keyframes walk {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-8px) rotate(3deg);
+  }
+}
+
+@keyframes shadow-pulse {
+  0%, 100% {
+    width: 12px;
+    opacity: 0.4;
+  }
+  50% {
+    width: 16px;
+    opacity: 0.2;
+  }
+}
+
+.animate-walk {
+  animation: walk 0.8s ease-in-out infinite;
+}
+
+.animate-shadow-pulse {
+  animation: shadow-pulse 0.8s ease-in-out infinite;
 }
